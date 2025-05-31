@@ -50,7 +50,7 @@ var Links = /** @class */ (function () {
         return this.keyword;
     };
     Links.prototype.handle_query = function (query) {
-        return [new ShellOutput(Safeness.Safe, "\n            My Links:<br>\n            &nbsp;&nbsp;- <a href=\"https://bsky.app/profile/t4rmyn.bsky.social\" target=\"_blank\" class=\"link\">Bluesky</a><br>\n            &nbsp;&nbsp;- <a href=\"https://t4rmyn.itch.io/\" target=\"_blank\" class=\"link\">itch.io</a><br>\n            ")];
+        return [new ShellOutput(Safeness.Safe, "\n            My Links:<br>\n            &nbsp;&nbsp;- <b><i><a href=\"https://bsky.app/profile/t4rmyn.bsky.social\" target=\"_blank\" class=\"link\">Bluesky</a></i></b><br>\n            &nbsp;&nbsp;- <b><i><a href=\"https://t4rmyn.itch.io/\" target=\"_blank\" class=\"link\">itch.io</a></i></b><br>\n            ")];
     };
     return Links;
 }());
