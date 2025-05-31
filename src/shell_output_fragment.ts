@@ -3,7 +3,7 @@ enum Safeness {
     Unsafe,
 }
 
-class ShellOutput {
+class ShellOutputFragment {
     type: Safeness;
     content: string;
 
@@ -12,11 +12,11 @@ class ShellOutput {
         this.content = content;
     }
 
-    get_type(this: ShellOutput): Safeness {
+    get_type(this: ShellOutputFragment): Safeness {
         return this.type;
     }
 
-    get_content(this: ShellOutput): string {
+    get_content(this: ShellOutputFragment): string {
         return this.content;
     }
 }

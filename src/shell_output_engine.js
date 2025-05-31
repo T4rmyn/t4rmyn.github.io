@@ -1,38 +1,38 @@
-var ShellString = /** @class */ (function () {
-    function ShellString(working_directory, query) {
+var ShellOutputEngine = /** @class */ (function () {
+    function ShellOutputEngine(working_directory, query) {
         this.query_id = 1;
         this.query = query;
         this.query_history = new Array();
         this.set_query_history_i(this.query_history.length - 1);
     }
-    ShellString.get_instance = function () {
-        if (!ShellString.instance) {
-            ShellString.instance = new ShellString("~", "");
+    ShellOutputEngine.get_instance = function () {
+        if (!ShellOutputEngine.instance) {
+            ShellOutputEngine.instance = new ShellOutputEngine("~", "");
         }
-        return ShellString.instance;
+        return ShellOutputEngine.instance;
     };
-    ShellString.prototype.set_query_history_i = function (value) {
+    ShellOutputEngine.prototype.set_query_history_i = function (value) {
         this.query_history_i = Math.min(this.query_history.length, Math.max(0, value));
         console.log(this.query_history_i.toString());
     };
-    ShellString.prototype.get_query_history = function () {
+    ShellOutputEngine.prototype.get_query_history = function () {
         return this.query_history;
     };
-    ShellString.prototype.get_query_history_i = function () {
+    ShellOutputEngine.prototype.get_query_history_i = function () {
         return this.query_history_i;
     };
-    ShellString.prototype.replace_query = function (char) {
+    ShellOutputEngine.prototype.replace_query = function (char) {
         this.query = char.toString();
     };
-    ShellString.prototype.add_char_query = function (char) {
+    ShellOutputEngine.prototype.add_char_query = function (char) {
         this.query = this.query.concat(char.toString());
         this.set_query_history_i(this.query_history.length);
     };
-    ShellString.prototype.remove_char_query = function () {
+    ShellOutputEngine.prototype.remove_char_query = function () {
         this.query = this.query.substring(0, this.query.length - 1);
         this.set_query_history_i(this.query_history.length);
     };
-    ShellString.prototype.handle_output = function (output, obj) {
+    ShellOutputEngine.prototype.handle_output = function (output, obj) {
         var final_string = "";
         output.forEach(function (text) {
             var temp_string = text.get_content();
@@ -48,33 +48,33 @@ var ShellString = /** @class */ (function () {
         });
         obj.innerHTML = final_string;
     };
-    ShellString.prototype.update_shell = function () {
+    ShellOutputEngine.prototype.update_shell = function () {
         var text = document.getElementById("main".concat(this.query_id.toString()));
         if (text !== null) {
             var output = [
-                new ShellOutput(Safeness.Safe, "".concat("t4rmyn@arkane:", Shell.get_instance().get_wd().toString(), "> ", "<span style=\"color: #ebdbb2\"> ")),
-                new ShellOutput(Safeness.Unsafe, this.query.toString()),
-                new ShellOutput(Safeness.Safe, "█</span>"),
+                new ShellOutputFragment(Safeness.Safe, "".concat("t4rmyn@arkane:", Shell.get_instance().get_wd().toString(), "> ", "<span style=\"color: #ebdbb2\"> ")),
+                new ShellOutputFragment(Safeness.Unsafe, this.query.toString()),
+                new ShellOutputFragment(Safeness.Safe, "█</span>"),
             ];
             this.handle_output(output, text);
         }
     };
-    ShellString.prototype.update_ticker = function () {
+    ShellOutputEngine.prototype.update_ticker = function () {
         var ticker = document.getElementById("t".concat(this.query_id.toString()));
         ticker.innerHTML = "[".concat(this.query_id.toString(), "]");
     };
-    ShellString.prototype.freeze_shell = function () {
+    ShellOutputEngine.prototype.freeze_shell = function () {
         var text = document.getElementById("main".concat(this.query_id.toString()));
         if (text !== null) {
             var output = [
-                new ShellOutput(Safeness.Safe, "".concat("t4rmyn@arkane:", Shell.get_instance().get_wd().toString(), "> ", "<span style=\"color: #ebdbb2\"> ")),
-                new ShellOutput(Safeness.Unsafe, this.query.toString()),
-                new ShellOutput(Safeness.Safe, "</span>"),
+                new ShellOutputFragment(Safeness.Safe, "".concat("t4rmyn@arkane:", Shell.get_instance().get_wd().toString(), "> ", "<span style=\"color: #ebdbb2\"> ")),
+                new ShellOutputFragment(Safeness.Unsafe, this.query.toString()),
+                new ShellOutputFragment(Safeness.Safe, "</span>"),
             ];
             this.handle_output(output, text);
         }
     };
-    ShellString.prototype.arrow_history = function (up) {
+    ShellOutputEngine.prototype.arrow_history = function (up) {
         if (up) {
             this.set_query_history_i(this.get_query_history_i() - 1);
         }
@@ -88,7 +88,7 @@ var ShellString = /** @class */ (function () {
             this.replace_query(this.query_history[this.get_query_history_i()]);
         }
     };
-    ShellString.prototype.submit_query = function () {
+    ShellOutputEngine.prototype.submit_query = function () {
         var old_l_section_box = document.getElementById("ls".concat((this.query_id).toString()));
         this.freeze_shell();
         this.query_id += 1;
@@ -123,31 +123,31 @@ var ShellString = /** @class */ (function () {
         this.update_ticker();
         new_section_box.scrollIntoView();
     };
-    return ShellString;
+    return ShellOutputEngine;
 }());
 document.addEventListener('keydown', function (event) {
     if (String(event.key).length === 1) {
-        ShellString.get_instance().add_char_query(event.key);
+        ShellOutputEngine.get_instance().add_char_query(event.key);
     }
     else {
         switch (event.key) {
             case "Backspace":
-                ShellString.get_instance().remove_char_query();
+                ShellOutputEngine.get_instance().remove_char_query();
                 break;
             case "Enter":
-                ShellString.get_instance().submit_query();
+                ShellOutputEngine.get_instance().submit_query();
                 break;
             case "ArrowUp":
                 event.preventDefault();
-                ShellString.get_instance().arrow_history(true);
+                ShellOutputEngine.get_instance().arrow_history(true);
                 break;
             case "ArrowDown":
                 event.preventDefault();
-                ShellString.get_instance().arrow_history(false);
+                ShellOutputEngine.get_instance().arrow_history(false);
                 break;
             default:
                 break;
         }
     }
-    ShellString.get_instance().update_shell();
+    ShellOutputEngine.get_instance().update_shell();
 });

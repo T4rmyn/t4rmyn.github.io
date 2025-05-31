@@ -26,7 +26,7 @@ class Shell {
 
         this.keywords = new Map<string, ShellApp>();
         for (let i = 0; i < this.apps.length; i++) {
-            console.log(this.apps[i])
+            console.log(this.apps[i]);
             this.keywords.set(this.apps[i].get_keyword(), this.apps[i]);
         }
     }
@@ -39,7 +39,7 @@ class Shell {
         return this.wd;
     }
 
-    submit_query(query: string): ShellOutput[] {
+    submit_query(query: string): ShellOutputFragment[] {
         let splitted: string[] = query.split(" ");
         if (this.keywords.has(splitted[0])) {
             console.log(this.keywords);
@@ -48,9 +48,9 @@ class Shell {
             );
         } else {
             return [
-                new ShellOutput(Safeness.Safe, "Command: <b><i>"),
-                new ShellOutput(Safeness.Unsafe, splitted[0]),
-                new ShellOutput(Safeness.Safe, "</i></b> not found."),
+                new ShellOutputFragment(Safeness.Safe, "Command: <b><i>"),
+                new ShellOutputFragment(Safeness.Unsafe, splitted[0]),
+                new ShellOutputFragment(Safeness.Safe, "</i></b> not found."),
             ];
         }
     }

@@ -2,7 +2,7 @@ interface ShellApp {
     keyword: string;
 
     get_keyword(this: ShellApp): string;
-    handle_query(query: string): ShellOutput[];
+    handle_query(query: string): ShellOutputFragment[];
 }
 
 class Help implements ShellApp {
@@ -16,14 +16,14 @@ class Help implements ShellApp {
         return this.keyword;
     }
 
-    handle_query(query: string): ShellOutput[] {
+    handle_query(query: string): ShellOutputFragment[] {
         let keywords: string[] = Array.from(Shell.get_instance().get_keywords().keys()).sort();
-        let final_output: ShellOutput[] = [];
-        final_output.push(new ShellOutput(Safeness.Safe, "Available Commands:<br>"));
+        let final_output: ShellOutputFragment[] = [];
+        final_output.push(new ShellOutputFragment(Safeness.Safe, "Available Commands:<br>"));
         for (let i = 0; i < keywords.length; i++) {
-            final_output.push(new ShellOutput(Safeness.Safe, "&nbsp;&nbsp;- <b><i>"));
-            final_output.push(new ShellOutput(Safeness.Unsafe, keywords[i]));
-            final_output.push(new ShellOutput(Safeness.Safe, "</i></b><br>"));
+            final_output.push(new ShellOutputFragment(Safeness.Safe, "&nbsp;&nbsp;- <b><i>"));
+            final_output.push(new ShellOutputFragment(Safeness.Unsafe, keywords[i]));
+            final_output.push(new ShellOutputFragment(Safeness.Safe, "</i></b><br>"));
         }
         return final_output;
     }
@@ -40,8 +40,8 @@ class Bio implements ShellApp {
         return this.keyword;
     }
 
-    handle_query(query: string): ShellOutput[] {
-        return [new ShellOutput(
+    handle_query(query: string): ShellOutputFragment[] {
+        return [new ShellOutputFragment(
             Safeness.Safe,
             `
                 Hi, the name's Tarmyn!
@@ -63,8 +63,8 @@ class PrintWorkingDirectory implements ShellApp {
         return this.keyword;
     }
 
-    handle_query(query: string): ShellOutput[] {
-        return [new ShellOutput(
+    handle_query(query: string): ShellOutputFragment[] {
+        return [new ShellOutputFragment(
             Safeness.Safe,
             Shell.get_instance().get_wd().concat(` 
                 (...I'll someday implement a full fledge filesystem here, 
@@ -85,8 +85,8 @@ class Links implements ShellApp {
         return this.keyword;
     }
 
-    handle_query(query: string): ShellOutput[] {
-        return [new ShellOutput(
+    handle_query(query: string): ShellOutputFragment[] {
+        return [new ShellOutputFragment(
             Safeness.Safe,
             `
             My Links:<br>
@@ -108,14 +108,14 @@ class CmdHistory implements ShellApp {
         return this.keyword;
     }
 
-    handle_query(query: string): ShellOutput[] {
-        let final_output: ShellOutput[] = [];
-        final_output.push(new ShellOutput(Safeness.Safe, "History:<br>"));
-        let query_history: string[] = ShellString.get_instance().get_query_history();
+    handle_query(query: string): ShellOutputFragment[] {
+        let final_output: ShellOutputFragment[] = [];
+        final_output.push(new ShellOutputFragment(Safeness.Safe, "History:<br>"));
+        let query_history: string[] = ShellOutputEngine.get_instance().get_query_history();
         for (let i = 0; i < query_history.length; i++) {
-            final_output.push(new ShellOutput(Safeness.Safe, "&nbsp;&nbsp;- <b><i>"));
-            final_output.push(new ShellOutput(Safeness.Unsafe, query_history[i]));
-            final_output.push(new ShellOutput(Safeness.Safe, "</i></b><br>"));
+            final_output.push(new ShellOutputFragment(Safeness.Safe, "&nbsp;&nbsp;- <b><i>"));
+            final_output.push(new ShellOutputFragment(Safeness.Unsafe, query_history[i]));
+            final_output.push(new ShellOutputFragment(Safeness.Safe, "</i></b><br>"));
         }
         return final_output;
     }
@@ -155,8 +155,8 @@ class Fortune implements ShellApp {
         return this.keyword;
     }
 
-    handle_query(query: string): ShellOutput[] {
-        return [new ShellOutput(
+    handle_query(query: string): ShellOutputFragment[] {
+        return [new ShellOutputFragment(
             Safeness.Safe,
             this.quotes[Math.floor(Math.random() * this.quotes.length)],
         )];

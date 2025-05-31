@@ -34,9 +34,9 @@ var Shell = /** @class */ (function () {
         }
         else {
             return [
-                new ShellOutput(Safeness.Safe, "Command: <b><i>"),
-                new ShellOutput(Safeness.Unsafe, splitted[0]),
-                new ShellOutput(Safeness.Safe, "</i></b> not found."),
+                new ShellOutputFragment(Safeness.Safe, "Command: <b><i>"),
+                new ShellOutputFragment(Safeness.Unsafe, splitted[0]),
+                new ShellOutputFragment(Safeness.Safe, "</i></b> not found."),
             ];
         }
     };

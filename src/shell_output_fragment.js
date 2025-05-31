@@ -3,16 +3,16 @@ var Safeness;
     Safeness[Safeness["Safe"] = 0] = "Safe";
     Safeness[Safeness["Unsafe"] = 1] = "Unsafe";
 })(Safeness || (Safeness = {}));
-var ShellOutput = /** @class */ (function () {
-    function ShellOutput(type, content) {
+var ShellOutputFragment = /** @class */ (function () {
+    function ShellOutputFragment(type, content) {
         this.type = type;
         this.content = content;
     }
-    ShellOutput.prototype.get_type = function () {
+    ShellOutputFragment.prototype.get_type = function () {
         return this.type;
     };
-    ShellOutput.prototype.get_content = function () {
+    ShellOutputFragment.prototype.get_content = function () {
         return this.content;
     };
-    return ShellOutput;
+    return ShellOutputFragment;
 }());

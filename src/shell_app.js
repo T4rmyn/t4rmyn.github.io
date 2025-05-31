@@ -8,11 +8,11 @@ var Help = /** @class */ (function () {
     Help.prototype.handle_query = function (query) {
         var keywords = Array.from(Shell.get_instance().get_keywords().keys()).sort();
         var final_output = [];
-        final_output.push(new ShellOutput(Safeness.Safe, "Available Commands:<br>"));
+        final_output.push(new ShellOutputFragment(Safeness.Safe, "Available Commands:<br>"));
         for (var i = 0; i < keywords.length; i++) {
-            final_output.push(new ShellOutput(Safeness.Safe, "&nbsp;&nbsp;- <b><i>"));
-            final_output.push(new ShellOutput(Safeness.Unsafe, keywords[i]));
-            final_output.push(new ShellOutput(Safeness.Safe, "</i></b><br>"));
+            final_output.push(new ShellOutputFragment(Safeness.Safe, "&nbsp;&nbsp;- <b><i>"));
+            final_output.push(new ShellOutputFragment(Safeness.Unsafe, keywords[i]));
+            final_output.push(new ShellOutputFragment(Safeness.Safe, "</i></b><br>"));
         }
         return final_output;
     };
@@ -26,7 +26,7 @@ var Bio = /** @class */ (function () {
         return this.keyword;
     };
     Bio.prototype.handle_query = function (query) {
-        return [new ShellOutput(Safeness.Safe, "\n                Hi, the name's Tarmyn!\n                I'm an artist, programmer, and game developer.\n                Some things I like include Linux, Pokemon Mystery Dungeon, and progressive metal!\n            ")];
+        return [new ShellOutputFragment(Safeness.Safe, "\n                Hi, the name's Tarmyn!\n                I'm an artist, programmer, and game developer.\n                Some things I like include Linux, Pokemon Mystery Dungeon, and progressive metal!\n            ")];
     };
     return Bio;
 }());
@@ -38,7 +38,7 @@ var PrintWorkingDirectory = /** @class */ (function () {
         return this.keyword;
     };
     PrintWorkingDirectory.prototype.handle_query = function (query) {
-        return [new ShellOutput(Safeness.Safe, Shell.get_instance().get_wd().concat(" \n                (...I'll someday implement a full fledge filesystem here, \n                but for now enjoy this tilde.)\n            "))];
+        return [new ShellOutputFragment(Safeness.Safe, Shell.get_instance().get_wd().concat(" \n                (...I'll someday implement a full fledge filesystem here, \n                but for now enjoy this tilde.)\n            "))];
     };
     return PrintWorkingDirectory;
 }());
@@ -50,7 +50,7 @@ var Links = /** @class */ (function () {
         return this.keyword;
     };
     Links.prototype.handle_query = function (query) {
-        return [new ShellOutput(Safeness.Safe, "\n            My Links:<br>\n            &nbsp;&nbsp;- <b><i><a href=\"https://bsky.app/profile/t4rmyn.bsky.social\" target=\"_blank\" class=\"link\">Bluesky</a></i></b><br>\n            &nbsp;&nbsp;- <b><i><a href=\"https://t4rmyn.itch.io/\" target=\"_blank\" class=\"link\">itch.io</a></i></b><br>\n            ")];
+        return [new ShellOutputFragment(Safeness.Safe, "\n            My Links:<br>\n            &nbsp;&nbsp;- <b><i><a href=\"https://bsky.app/profile/t4rmyn.bsky.social\" target=\"_blank\" class=\"link\">Bluesky</a></i></b><br>\n            &nbsp;&nbsp;- <b><i><a href=\"https://t4rmyn.itch.io/\" target=\"_blank\" class=\"link\">itch.io</a></i></b><br>\n            ")];
     };
     return Links;
 }());
@@ -63,12 +63,12 @@ var CmdHistory = /** @class */ (function () {
     };
     CmdHistory.prototype.handle_query = function (query) {
         var final_output = [];
-        final_output.push(new ShellOutput(Safeness.Safe, "History:<br>"));
-        var query_history = ShellString.get_instance().get_query_history();
+        final_output.push(new ShellOutputFragment(Safeness.Safe, "History:<br>"));
+        var query_history = ShellOutputEngine.get_instance().get_query_history();
         for (var i = 0; i < query_history.length; i++) {
-            final_output.push(new ShellOutput(Safeness.Safe, "&nbsp;&nbsp;- <b><i>"));
-            final_output.push(new ShellOutput(Safeness.Unsafe, query_history[i]));
-            final_output.push(new ShellOutput(Safeness.Safe, "</i></b><br>"));
+            final_output.push(new ShellOutputFragment(Safeness.Safe, "&nbsp;&nbsp;- <b><i>"));
+            final_output.push(new ShellOutputFragment(Safeness.Unsafe, query_history[i]));
+            final_output.push(new ShellOutputFragment(Safeness.Safe, "</i></b><br>"));
         }
         return final_output;
     };
@@ -101,7 +101,7 @@ var Fortune = /** @class */ (function () {
         return this.keyword;
     };
     Fortune.prototype.handle_query = function (query) {
-        return [new ShellOutput(Safeness.Safe, this.quotes[Math.floor(Math.random() * this.quotes.length)])];
+        return [new ShellOutputFragment(Safeness.Safe, this.quotes[Math.floor(Math.random() * this.quotes.length)])];
     };
     return Fortune;
 }());

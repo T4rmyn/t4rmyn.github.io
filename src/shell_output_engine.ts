@@ -1,12 +1,12 @@
-class ShellString {
-    static instance: ShellString;
+class ShellOutputEngine {
+    static instance: ShellOutputEngine;
 
-    public static get_instance(): ShellString {
-        if (!ShellString.instance) {
-            ShellString.instance = new ShellString("~", "");
+    public static get_instance(): ShellOutputEngine {
+        if (!ShellOutputEngine.instance) {
+            ShellOutputEngine.instance = new ShellOutputEngine("~", "");
         }
 
-        return ShellString.instance;
+        return ShellOutputEngine.instance;
     }
 
     query_id: number;
@@ -14,16 +14,16 @@ class ShellString {
     query_history: string[];
     query_history_i: number;
 
-    set_query_history_i(this: ShellString, value: number): void {
+    set_query_history_i(this: ShellOutputEngine, value: number): void {
         this.query_history_i = Math.min(this.query_history.length, Math.max(0, value));
         console.log(this.query_history_i.toString());
     }
 
-    get_query_history(this: ShellString): string[] {
+    get_query_history(this: ShellOutputEngine): string[] {
         return this.query_history;
     }
 
-    get_query_history_i(this: ShellString): number {
+    get_query_history_i(this: ShellOutputEngine): number {
         return this.query_history_i;
     }
 
@@ -34,24 +34,24 @@ class ShellString {
         this.set_query_history_i(this.query_history.length - 1);
     }
 
-    replace_query(this: ShellString, char: String): void {
+    replace_query(this: ShellOutputEngine, char: String): void {
         this.query = char.toString();
     }
 
-    add_char_query(this: ShellString, char: String): void {
+    add_char_query(this: ShellOutputEngine, char: String): void {
         this.query = this.query.concat(char.toString());
         this.set_query_history_i(this.query_history.length);
     }
 
-    remove_char_query(this: ShellString): void {
+    remove_char_query(this: ShellOutputEngine): void {
         this.query = this.query.substring(0, this.query.length - 1);
         this.set_query_history_i(this.query_history.length);
     }
 
-    handle_output(this: ShellString, output: ShellOutput[], obj: HTMLElement): void {
+    handle_output(this: ShellOutputEngine, output: ShellOutputFragment[], obj: HTMLElement): void {
         let final_string = "";
         
-        output.forEach(function(text: ShellOutput) {
+        output.forEach(function(text: ShellOutputFragment) {
             let temp_string = text.get_content();
             if (text.get_type() === Safeness.Unsafe) {
                 temp_string = String(temp_string)
@@ -67,52 +67,52 @@ class ShellString {
         obj.innerHTML = final_string;
     }
 
-    update_shell(this: ShellString): void {
+    update_shell(this: ShellOutputEngine): void {
         let text: HTMLElement | null = document.getElementById(
             "main".concat(this.query_id.toString())
         );
         if (text !== null) {
-            let output: ShellOutput[] = [
-                new ShellOutput(Safeness.Safe, "".concat(
+            let output: ShellOutputFragment[] = [
+                new ShellOutputFragment(Safeness.Safe, "".concat(
                     "t4rmyn@arkane:",
                     Shell.get_instance().get_wd().toString(),
                     "> ",
                     "<span style=\"color: #ebdbb2\"> ",
                 )),
-                new ShellOutput(Safeness.Unsafe, this.query.toString()),
-                new ShellOutput(Safeness.Safe, "█</span>"),
+                new ShellOutputFragment(Safeness.Unsafe, this.query.toString()),
+                new ShellOutputFragment(Safeness.Safe, "█</span>"),
             ];
             this.handle_output(output, text);
         }
     }
 
-    update_ticker(this: ShellString): void {
+    update_ticker(this: ShellOutputEngine): void {
         let ticker: HTMLElement | null = document.getElementById(
             "t".concat(this.query_id.toString())
         );
         (ticker as HTMLElement).innerHTML = "[".concat(this.query_id.toString(),"]");
     }
 
-    freeze_shell(this: ShellString): void {
+    freeze_shell(this: ShellOutputEngine): void {
         let text: HTMLElement | null = document.getElementById(
             "main".concat(this.query_id.toString())
         );
         if (text !== null) {
-            let output: ShellOutput[] = [
-                new ShellOutput(Safeness.Safe, "".concat(
+            let output: ShellOutputFragment[] = [
+                new ShellOutputFragment(Safeness.Safe, "".concat(
                     "t4rmyn@arkane:",
                     Shell.get_instance().get_wd().toString(),
                     "> ",
                     "<span style=\"color: #ebdbb2\"> ",
                 )),
-                new ShellOutput(Safeness.Unsafe, this.query.toString()),
-                new ShellOutput(Safeness.Safe, "</span>"),
+                new ShellOutputFragment(Safeness.Unsafe, this.query.toString()),
+                new ShellOutputFragment(Safeness.Safe, "</span>"),
             ];
             this.handle_output(output, text);
         }
     }
 
-    arrow_history(this: ShellString, up: boolean): void {
+    arrow_history(this: ShellOutputEngine, up: boolean): void {
         if (up) {
             this.set_query_history_i(this.get_query_history_i() - 1);
         } else {
@@ -125,7 +125,7 @@ class ShellString {
         }
     }
 
-    submit_query(this: ShellString): void {
+    submit_query(this: ShellOutputEngine): void {
         let old_l_section_box: HTMLElement | null = document.getElementById("ls".concat((this.query_id).toString()))
 
         this.freeze_shell();
@@ -154,7 +154,7 @@ class ShellString {
         this.query_history.push(this.query.toString())
         console.log(this.query_history)
 
-        let output_text: ShellOutput[] = Shell.get_instance().submit_query(this.query.toString());
+        let output_text: ShellOutputFragment[] = Shell.get_instance().submit_query(this.query.toString());
         this.handle_output(output_text, new_obj);
         
         let new_query: HTMLElement = document.createElement("p");
@@ -178,26 +178,26 @@ class ShellString {
 
 document.addEventListener('keydown', function(event) {
     if (String(event.key).length === 1) {
-        ShellString.get_instance().add_char_query(event.key)
+        ShellOutputEngine.get_instance().add_char_query(event.key)
     } else {
         switch (event.key) {
             case "Backspace":
-                ShellString.get_instance().remove_char_query()
+                ShellOutputEngine.get_instance().remove_char_query()
                 break;
             case "Enter":
-                ShellString.get_instance().submit_query()
+                ShellOutputEngine.get_instance().submit_query()
                 break;
             case "ArrowUp":
                 event.preventDefault();
-                ShellString.get_instance().arrow_history(true);
+                ShellOutputEngine.get_instance().arrow_history(true);
                 break;
             case "ArrowDown":
                 event.preventDefault();
-                ShellString.get_instance().arrow_history(false);
+                ShellOutputEngine.get_instance().arrow_history(false);
                 break;
             default:
                 break;
         }
     }
-    ShellString.get_instance().update_shell()
+    ShellOutputEngine.get_instance().update_shell()
 });
