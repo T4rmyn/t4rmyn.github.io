@@ -12,23 +12,40 @@ class ShellString {
     query_id: number;
     query: String;
     query_history: string[];
+    query_history_i: number;
 
-    constructor(working_directory: String, query: String) {
-        this.query_id = 1;
-        this.query = query;
-        this.query_history = new Array();
+    set_query_history_i(this: ShellString, value: number): void {
+        this.query_history_i = Math.min(this.query_history.length, Math.max(0, value));
+        console.log(this.query_history_i.toString());
     }
 
     get_query_history(this: ShellString): string[] {
         return this.query_history;
     }
 
+    get_query_history_i(this: ShellString): number {
+        return this.query_history_i;
+    }
+
+    constructor(working_directory: String, query: String) {
+        this.query_id = 1;
+        this.query = query;
+        this.query_history = new Array();
+        this.set_query_history_i(this.query_history.length - 1);
+    }
+
+    replace_query(this: ShellString, char: String): void {
+        this.query = char.toString();
+    }
+
     add_char_query(this: ShellString, char: String): void {
         this.query = this.query.concat(char.toString());
+        this.set_query_history_i(this.query_history.length);
     }
 
     remove_char_query(this: ShellString): void {
         this.query = this.query.substring(0, this.query.length - 1);
+        this.set_query_history_i(this.query_history.length);
     }
 
     handle_output(this: ShellString, output: ShellOutput[], obj: HTMLElement): void {
@@ -95,6 +112,19 @@ class ShellString {
         }
     }
 
+    arrow_history(this: ShellString, up: boolean): void {
+        if (up) {
+            this.set_query_history_i(this.get_query_history_i() - 1);
+        } else {
+            this.set_query_history_i(this.get_query_history_i() + 1);
+        }
+        if (this.get_query_history_i() == this.query_history.length) {
+            this.replace_query("");
+        } else {
+            this.replace_query(this.query_history[this.get_query_history_i()]);
+        }
+    }
+
     submit_query(this: ShellString): void {
         let old_l_section_box: HTMLElement | null = document.getElementById("ls".concat((this.query_id).toString()))
 
@@ -137,7 +167,10 @@ class ShellString {
         (parent_div as HTMLElement).appendChild(new_section_box);
 
         this.query = "";
-        this.update_ticker()
+        this.set_query_history_i(this.query_history.length);
+        this.update_ticker();
+
+        new_section_box.scrollIntoView();
     }
 }
 
@@ -151,6 +184,14 @@ document.addEventListener('keydown', function(event) {
                 break;
             case "Enter":
                 ShellString.get_instance().submit_query()
+                break;
+            case "ArrowUp":
+                event.preventDefault();
+                ShellString.get_instance().arrow_history(true);
+                break;
+            case "ArrowDown":
+                event.preventDefault();
+                ShellString.get_instance().arrow_history(false);
                 break;
             default:
                 break;

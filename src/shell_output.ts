@@ -7,7 +7,7 @@ class ShellOutput {
     type: Safeness;
     content: string;
 
-    constructor(type, content) {
+    constructor(type: Safeness, content: string) {
         this.type = type;
         this.content = content;
     }

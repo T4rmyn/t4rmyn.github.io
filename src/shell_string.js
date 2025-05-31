@@ -3,6 +3,7 @@ var ShellString = /** @class */ (function () {
         this.query_id = 1;
         this.query = query;
         this.query_history = new Array();
+        this.set_query_history_i(this.query_history.length - 1);
     }
     ShellString.get_instance = function () {
         if (!ShellString.instance) {
@@ -10,14 +11,26 @@ var ShellString = /** @class */ (function () {
         }
         return ShellString.instance;
     };
+    ShellString.prototype.set_query_history_i = function (value) {
+        this.query_history_i = Math.min(this.query_history.length, Math.max(0, value));
+        console.log(this.query_history_i.toString());
+    };
     ShellString.prototype.get_query_history = function () {
         return this.query_history;
     };
+    ShellString.prototype.get_query_history_i = function () {
+        return this.query_history_i;
+    };
+    ShellString.prototype.replace_query = function (char) {
+        this.query = char.toString();
+    };
     ShellString.prototype.add_char_query = function (char) {
         this.query = this.query.concat(char.toString());
+        this.set_query_history_i(this.query_history.length);
     };
     ShellString.prototype.remove_char_query = function () {
         this.query = this.query.substring(0, this.query.length - 1);
+        this.set_query_history_i(this.query_history.length);
     };
     ShellString.prototype.handle_output = function (output, obj) {
         var final_string = "";
@@ -61,6 +74,20 @@ var ShellString = /** @class */ (function () {
             this.handle_output(output, text);
         }
     };
+    ShellString.prototype.arrow_history = function (up) {
+        if (up) {
+            this.set_query_history_i(this.get_query_history_i() - 1);
+        }
+        else {
+            this.set_query_history_i(this.get_query_history_i() + 1);
+        }
+        if (this.get_query_history_i() == this.query_history.length) {
+            this.replace_query("");
+        }
+        else {
+            this.replace_query(this.query_history[this.get_query_history_i()]);
+        }
+    };
     ShellString.prototype.submit_query = function () {
         var old_l_section_box = document.getElementById("ls".concat((this.query_id).toString()));
         this.freeze_shell();
@@ -91,7 +118,9 @@ var ShellString = /** @class */ (function () {
         new_section_box.appendChild(new_l_section_box);
         parent_div.appendChild(new_section_box);
         this.query = "";
+        this.set_query_history_i(this.query_history.length);
         this.update_ticker();
+        new_section_box.scrollIntoView();
     };
     return ShellString;
 }());
@@ -106,6 +135,14 @@ document.addEventListener('keydown', function (event) {
                 break;
             case "Enter":
                 ShellString.get_instance().submit_query();
+                break;
+            case "ArrowUp":
+                event.preventDefault();
+                ShellString.get_instance().arrow_history(true);
+                break;
+            case "ArrowDown":
+                event.preventDefault();
+                ShellString.get_instance().arrow_history(false);
                 break;
             default:
                 break;

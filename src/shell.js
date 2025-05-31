@@ -7,6 +7,7 @@ var Shell = /** @class */ (function () {
         this.apps.push(new PrintWorkingDirectory());
         this.apps.push(new Links());
         this.apps.push(new CmdHistory());
+        this.apps.push(new Fortune());
         this.keywords = new Map();
         for (var i = 0; i < this.apps.length; i++) {
             console.log(this.apps[i]);

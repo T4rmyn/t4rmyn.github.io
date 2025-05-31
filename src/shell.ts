@@ -22,6 +22,7 @@ class Shell {
         this.apps.push(new PrintWorkingDirectory());
         this.apps.push(new Links());
         this.apps.push(new CmdHistory());
+        this.apps.push(new Fortune());
 
         this.keywords = new Map<string, ShellApp>();
         for (let i = 0; i < this.apps.length; i++) {
