@@ -6,7 +6,7 @@ var Shell = /** @class */ (function () {
         this.apps.push(new Bio());
         this.apps.push(new PrintWorkingDirectory());
         this.apps.push(new Links());
-        // this.apps.push(new CmdHistory());
+        this.apps.push(new CmdHistory());
         this.keywords = new Map();
         for (var i = 0; i < this.apps.length; i++) {
             console.log(this.apps[i]);
@@ -32,7 +32,11 @@ var Shell = /** @class */ (function () {
             return this.keywords.get(splitted[0]).handle_query(splitted.slice(1).join());
         }
         else {
-            return "!!!".concat(splitted[0]);
+            return [
+                new ShellOutput(Safeness.Safe, "Command: <b><i>"),
+                new ShellOutput(Safeness.Unsafe, splitted[0]),
+                new ShellOutput(Safeness.Safe, "</i></b> not found."),
+            ];
         }
     };
     return Shell;

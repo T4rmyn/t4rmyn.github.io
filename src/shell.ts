@@ -21,7 +21,7 @@ class Shell {
         this.apps.push(new Bio());
         this.apps.push(new PrintWorkingDirectory());
         this.apps.push(new Links());
-        // this.apps.push(new CmdHistory());
+        this.apps.push(new CmdHistory());
 
         this.keywords = new Map<string, ShellApp>();
         for (let i = 0; i < this.apps.length; i++) {
@@ -38,7 +38,7 @@ class Shell {
         return this.wd;
     }
 
-    submit_query(query: string): string {
+    submit_query(query: string): ShellOutput[] {
         let splitted: string[] = query.split(" ");
         if (this.keywords.has(splitted[0])) {
             console.log(this.keywords);
@@ -46,7 +46,11 @@ class Shell {
                 splitted.slice(1).join()
             );
         } else {
-            return "!!!".concat(splitted[0]);
+            return [
+                new ShellOutput(Safeness.Safe, "Command: <b><i>"),
+                new ShellOutput(Safeness.Unsafe, splitted[0]),
+                new ShellOutput(Safeness.Safe, "</i></b> not found."),
+            ];
         }
     }
 }

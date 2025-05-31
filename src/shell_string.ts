@@ -31,19 +31,41 @@ class ShellString {
         this.query = this.query.substring(0, this.query.length - 1);
     }
 
+    handle_output(this: ShellString, output: ShellOutput[], obj: HTMLElement): void {
+        let final_string = "";
+        
+        output.forEach(function(text: ShellOutput) {
+            let temp_string = text.get_content();
+            if (text.get_type() === Safeness.Unsafe) {
+                temp_string = String(temp_string)
+                    .replaceAll("&", "&amp;")
+                    .replaceAll("<", "&lt;")
+                    .replaceAll(">", "&gt;")
+                    .replaceAll('"', "&quot;")
+                    .replaceAll("'", "&#39;");
+            }
+            final_string = final_string.concat(temp_string);
+        })
+
+        obj.innerHTML = final_string;
+    }
+
     update_shell(this: ShellString): void {
         let text: HTMLElement | null = document.getElementById(
             "main".concat(this.query_id.toString())
         );
-        console.log(text)
         if (text !== null) {
-            (text as HTMLElement).innerHTML = "t4rmyn@arkane:".concat(
-                Shell.get_instance().get_wd().toString(),
-                "> ",
-                "<span style=\"color: #ebdbb2\"> ",
-            );
-            (text as HTMLElement).innerText = (text as HTMLElement).innerText.concat(" ", this.query.toString());
-            (text as HTMLElement).innerHTML = (text as HTMLElement).innerHTML.concat("█</span>");
+            let output: ShellOutput[] = [
+                new ShellOutput(Safeness.Safe, "".concat(
+                    "t4rmyn@arkane:",
+                    Shell.get_instance().get_wd().toString(),
+                    "> ",
+                    "<span style=\"color: #ebdbb2\"> ",
+                )),
+                new ShellOutput(Safeness.Unsafe, this.query.toString()),
+                new ShellOutput(Safeness.Safe, "█</span>"),
+            ];
+            this.handle_output(output, text);
         }
     }
 
@@ -59,13 +81,17 @@ class ShellString {
             "main".concat(this.query_id.toString())
         );
         if (text !== null) {
-            (text as HTMLElement).innerHTML = "t4rmyn@arkane:".concat(
-                Shell.get_instance().get_wd().toString(),
-                "> ",
-                "<span style=\"color: #ebdbb2\">",
-            );
-            (text as HTMLElement).innerText = (text as HTMLElement).innerText.concat(" ", this.query.toString());
-            (text as HTMLElement).innerHTML = (text as HTMLElement).innerHTML.concat("</span>");
+            let output: ShellOutput[] = [
+                new ShellOutput(Safeness.Safe, "".concat(
+                    "t4rmyn@arkane:",
+                    Shell.get_instance().get_wd().toString(),
+                    "> ",
+                    "<span style=\"color: #ebdbb2\"> ",
+                )),
+                new ShellOutput(Safeness.Unsafe, this.query.toString()),
+                new ShellOutput(Safeness.Safe, "</span>"),
+            ];
+            this.handle_output(output, text);
         }
     }
 
@@ -98,14 +124,8 @@ class ShellString {
         this.query_history.push(this.query.toString())
         console.log(this.query_history)
 
-        let output_text: string = Shell.get_instance().submit_query(this.query.toString());
-        if (output_text.startsWith("!!!")) {
-            new_obj.innerHTML = "Command: <b><i>";
-            new_obj.innerText = new_obj.innerText.concat(output_text.slice(3));
-            new_obj.innerHTML = new_obj.innerHTML.concat("</i></b> not recognized.");
-        } else {
-            new_obj.innerHTML = output_text;
-        }
+        let output_text: ShellOutput[] = Shell.get_instance().submit_query(this.query.toString());
+        this.handle_output(output_text, new_obj);
         
         let new_query: HTMLElement = document.createElement("p");
         new_query.classList.add("terminal-query");
