@@ -164,7 +164,9 @@ class ShellString {
         (old_l_section_box as HTMLElement).appendChild(new_obj);
         (new_l_section_box as HTMLElement).appendChild(new_query);
         (new_section_box as HTMLElement).appendChild(new_l_section_box);
-        (parent_div as HTMLElement).appendChild(new_section_box);
+
+        let source: HTMLElement | null = document.getElementById("source");
+        (parent_div as HTMLElement).insertBefore(new_section_box, source);
 
         this.query = "";
         this.set_query_history_i(this.query_history.length);

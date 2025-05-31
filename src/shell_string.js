@@ -116,7 +116,8 @@ var ShellString = /** @class */ (function () {
         old_l_section_box.appendChild(new_obj);
         new_l_section_box.appendChild(new_query);
         new_section_box.appendChild(new_l_section_box);
-        parent_div.appendChild(new_section_box);
+        var source = document.getElementById("source");
+        parent_div.insertBefore(new_section_box, source);
         this.query = "";
         this.set_query_history_i(this.query_history.length);
         this.update_ticker();

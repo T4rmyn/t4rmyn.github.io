@@ -33,6 +33,19 @@ body {
     scroll-behavior: smooth;
 }
 
+#source {
+    color: #7c6f64;
+    font-family: "Cascadia Code";
+    font-size: 12px;
+    text-align: center;
+    margin: 0px;
+}
+
+#source-link {
+    color: #665c54;
+    font-family: "Cascadia Code";
+}
+
 .upper-section-box {
     align-items: center;
     display: flex;
