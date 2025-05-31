@@ -12,7 +12,7 @@ class Help implements ShellApp {
         this.keyword = "help"
     }
 
-    get_keyword(this: Help) {
+    get_keyword(this: ShellApp) {
         return this.keyword;
     }
 
@@ -33,7 +33,7 @@ class Bio implements ShellApp {
         this.keyword = "bio"
     }
 
-    get_keyword(this: Bio) {
+    get_keyword(this: ShellApp) {
         return this.keyword;
     }
 
@@ -53,7 +53,7 @@ class PrintWorkingDirectory implements ShellApp {
         this.keyword = "pwd"
     }
 
-    get_keyword(this: PrintWorkingDirectory) {
+    get_keyword(this: ShellApp) {
         return this.keyword;
     }
 
@@ -69,7 +69,7 @@ class Links implements ShellApp {
         this.keyword = "links"
     }
 
-    get_keyword(this: PrintWorkingDirectory) {
+    get_keyword(this: ShellApp) {
         return this.keyword;
     }
 
@@ -89,7 +89,7 @@ class CmdHistory implements ShellApp {
         this.keyword = "history"
     }
 
-    get_keyword(this: PrintWorkingDirectory) {
+    get_keyword(this: ShellApp) {
         return this.keyword;
     }
 

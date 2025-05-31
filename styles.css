@@ -1,9 +1,10 @@
 body {
-    align-items: stretch;
     display: flex;
     background: linear-gradient(-70deg, #b8bb26, #83a598,#fe8019);
 	background-size: 300%;
+    height: 100%;
     animation: move-gradient 20s ease infinite;
+    margin: 0px;
 }
 
 @keyframes move-gradient {
@@ -20,8 +21,10 @@ body {
 
 #terminal-box {
     background-color: #1d2021;
-    border-radius: 10px;
+    box-shadow: 0px 0px 15px 5px #1d2021;
+    border-radius: 16px;
     display: flex;
+    align-self: stretch;
     flex-direction: column;
     margin: 16px;
     padding: 16px;
@@ -31,19 +34,23 @@ body {
 }
 
 .upper-section-box {
+    align-items: center;
     display: flex;
     flex-direction: row;
     background-color: #3c3836;
-    border-radius: 4px;
+    border-radius: 8px;
     color: #8ea598;
     padding: 4px;
     margin-bottom: 16px;
+    box-shadow: 0px 0px 10px 0px #1d2021 inset;
 }
 
 .lower-section-box {
     display: flex;
     flex-direction: column;
+    align-self: center;
     width: 100%;
+    text-shadow: 0px 0px 5px color-mix(in srgb, currentColor 40%, transparent);
 }
 
 .terminal-query {
