@@ -90,7 +90,7 @@ class Links implements ShellApp {
             Safeness.Safe,
             `
             My Links:<br>
-            &nbsp;&nbsp;- <b><i><a href="https://bsky.app/profile/t4rmyn.bsky.social" target="_blank" class="link">Bluesky</a></i></b><br>
+            &nbsp;&nbsp;- <b><i><a href="https://bsky.app/profile/t4rmyn.github.io" target="_blank" class="link">Bluesky</a></i></b><br>
             &nbsp;&nbsp;- <b><i><a href="https://t4rmyn.itch.io/" target="_blank" class="link">itch.io</a></i></b><br>
             `
         )];
