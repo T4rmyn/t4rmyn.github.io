@@ -1,13 +1,13 @@
 var ShellOutputEngine = /** @class */ (function () {
-    function ShellOutputEngine(working_directory, query) {
+    function ShellOutputEngine() {
         this.query_id = 1;
-        this.query = query;
+        this.query = "";
         this.query_history = new Array();
         this.set_query_history_i(this.query_history.length - 1);
     }
     ShellOutputEngine.get_instance = function () {
         if (!ShellOutputEngine.instance) {
-            ShellOutputEngine.instance = new ShellOutputEngine("~", "");
+            ShellOutputEngine.instance = new ShellOutputEngine();
         }
         return ShellOutputEngine.instance;
     };
@@ -22,10 +22,10 @@ var ShellOutputEngine = /** @class */ (function () {
         return this.query_history_i;
     };
     ShellOutputEngine.prototype.replace_query = function (char) {
-        this.query = char.toString();
+        this.query = char;
     };
     ShellOutputEngine.prototype.add_char_query = function (char) {
-        this.query = this.query.concat(char.toString());
+        this.query = this.query.concat(char);
         this.set_query_history_i(this.query_history.length);
     };
     ShellOutputEngine.prototype.remove_char_query = function () {
@@ -52,8 +52,8 @@ var ShellOutputEngine = /** @class */ (function () {
         var text = document.getElementById("main".concat(this.query_id.toString()));
         if (text !== null) {
             var output = [
-                new ShellOutputFragment(Safeness.Safe, "".concat("t4rmyn@arkane:", Shell.get_instance().get_wd().toString(), "> ", "<span style=\"color: #ebdbb2\"> ")),
-                new ShellOutputFragment(Safeness.Unsafe, this.query.toString()),
+                new ShellOutputFragment(Safeness.Safe, "".concat("t4rmyn@arkane:", Shell.get_instance().get_working_directory().find_absolute_path(), "> ", "<span style=\"color: #ebdbb2\"> ")),
+                new ShellOutputFragment(Safeness.Unsafe, this.query),
                 new ShellOutputFragment(Safeness.Safe, "█</span>"),
             ];
             this.handle_output(output, text);
@@ -67,8 +67,8 @@ var ShellOutputEngine = /** @class */ (function () {
         var text = document.getElementById("main".concat(this.query_id.toString()));
         if (text !== null) {
             var output = [
-                new ShellOutputFragment(Safeness.Safe, "".concat("t4rmyn@arkane:", Shell.get_instance().get_wd().toString(), "> ", "<span style=\"color: #ebdbb2\"> ")),
-                new ShellOutputFragment(Safeness.Unsafe, this.query.toString()),
+                new ShellOutputFragment(Safeness.Safe, "".concat("t4rmyn@arkane:", Shell.get_instance().get_working_directory().find_absolute_path(), "> ", "<span style=\"color: #ebdbb2\"> ")),
+                new ShellOutputFragment(Safeness.Unsafe, this.query),
                 new ShellOutputFragment(Safeness.Safe, "</span>"),
             ];
             this.handle_output(output, text);
@@ -106,9 +106,9 @@ var ShellOutputEngine = /** @class */ (function () {
         new_section_box.appendChild(new_l_section_box);
         var new_obj = document.createElement("p");
         new_obj.classList.add("terminal-response");
-        this.query_history.push(this.query.toString());
+        this.query_history.push(this.query);
         console.log(this.query_history);
-        var output_text = Shell.get_instance().submit_query(this.query.toString());
+        var output_text = Shell.get_instance().submit_query(this.query);
         this.handle_output(output_text, new_obj);
         var new_query = document.createElement("p");
         new_query.classList.add("terminal-query");

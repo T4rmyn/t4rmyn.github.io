@@ -3,52 +3,52 @@ class ShellOutputEngine {
 
     public static get_instance(): ShellOutputEngine {
         if (!ShellOutputEngine.instance) {
-            ShellOutputEngine.instance = new ShellOutputEngine("~", "");
+            ShellOutputEngine.instance = new ShellOutputEngine();
         }
 
         return ShellOutputEngine.instance;
     }
 
     query_id: number;
-    query: String;
+    query: string;
     query_history: string[];
     query_history_i: number;
 
-    set_query_history_i(this: ShellOutputEngine, value: number): void {
+    set_query_history_i(value: number): void {
         this.query_history_i = Math.min(this.query_history.length, Math.max(0, value));
         console.log(this.query_history_i.toString());
     }
 
-    get_query_history(this: ShellOutputEngine): string[] {
+    get_query_history(): string[] {
         return this.query_history;
     }
 
-    get_query_history_i(this: ShellOutputEngine): number {
+    get_query_history_i(): number {
         return this.query_history_i;
     }
 
-    constructor(working_directory: String, query: String) {
+    constructor() {
         this.query_id = 1;
-        this.query = query;
+        this.query = "";
         this.query_history = new Array();
         this.set_query_history_i(this.query_history.length - 1);
     }
 
-    replace_query(this: ShellOutputEngine, char: String): void {
-        this.query = char.toString();
+    replace_query(this: ShellOutputEngine, char: string): void {
+        this.query = char;
     }
 
-    add_char_query(this: ShellOutputEngine, char: String): void {
-        this.query = this.query.concat(char.toString());
+    add_char_query(char: string): void {
+        this.query = this.query.concat(char);
         this.set_query_history_i(this.query_history.length);
     }
 
-    remove_char_query(this: ShellOutputEngine): void {
+    remove_char_query(): void {
         this.query = this.query.substring(0, this.query.length - 1);
         this.set_query_history_i(this.query_history.length);
     }
 
-    handle_output(this: ShellOutputEngine, output: ShellOutputFragment[], obj: HTMLElement): void {
+    handle_output(output: ShellOutputFragment[], obj: HTMLElement): void {
         let final_string = "";
         
         output.forEach(function(text: ShellOutputFragment) {
@@ -67,7 +67,7 @@ class ShellOutputEngine {
         obj.innerHTML = final_string;
     }
 
-    update_shell(this: ShellOutputEngine): void {
+    update_shell(): void {
         let text: HTMLElement | null = document.getElementById(
             "main".concat(this.query_id.toString())
         );
@@ -75,25 +75,25 @@ class ShellOutputEngine {
             let output: ShellOutputFragment[] = [
                 new ShellOutputFragment(Safeness.Safe, "".concat(
                     "t4rmyn@arkane:",
-                    Shell.get_instance().get_wd().toString(),
+                    Shell.get_instance().get_working_directory().find_absolute_path(),
                     "> ",
                     "<span style=\"color: #ebdbb2\"> ",
                 )),
-                new ShellOutputFragment(Safeness.Unsafe, this.query.toString()),
+                new ShellOutputFragment(Safeness.Unsafe, this.query),
                 new ShellOutputFragment(Safeness.Safe, "█</span>"),
             ];
             this.handle_output(output, text);
         }
     }
 
-    update_ticker(this: ShellOutputEngine): void {
+    update_ticker(): void {
         let ticker: HTMLElement | null = document.getElementById(
             "t".concat(this.query_id.toString())
         );
         (ticker as HTMLElement).innerHTML = "[".concat(this.query_id.toString(),"]");
     }
 
-    freeze_shell(this: ShellOutputEngine): void {
+    freeze_shell(): void {
         let text: HTMLElement | null = document.getElementById(
             "main".concat(this.query_id.toString())
         );
@@ -101,18 +101,18 @@ class ShellOutputEngine {
             let output: ShellOutputFragment[] = [
                 new ShellOutputFragment(Safeness.Safe, "".concat(
                     "t4rmyn@arkane:",
-                    Shell.get_instance().get_wd().toString(),
+                    Shell.get_instance().get_working_directory().find_absolute_path(),
                     "> ",
                     "<span style=\"color: #ebdbb2\"> ",
                 )),
-                new ShellOutputFragment(Safeness.Unsafe, this.query.toString()),
+                new ShellOutputFragment(Safeness.Unsafe, this.query),
                 new ShellOutputFragment(Safeness.Safe, "</span>"),
             ];
             this.handle_output(output, text);
         }
     }
 
-    arrow_history(this: ShellOutputEngine, up: boolean): void {
+    arrow_history(up: boolean): void {
         if (up) {
             this.set_query_history_i(this.get_query_history_i() - 1);
         } else {
@@ -125,7 +125,7 @@ class ShellOutputEngine {
         }
     }
 
-    submit_query(this: ShellOutputEngine): void {
+    submit_query(): void {
         let old_l_section_box: HTMLElement | null = document.getElementById("ls".concat((this.query_id).toString()))
 
         this.freeze_shell();
@@ -151,10 +151,10 @@ class ShellOutputEngine {
         let new_obj: HTMLElement = document.createElement("p");
         new_obj.classList.add("terminal-response");
 
-        this.query_history.push(this.query.toString())
+        this.query_history.push(this.query)
         console.log(this.query_history)
 
-        let output_text: ShellOutputFragment[] = Shell.get_instance().submit_query(this.query.toString());
+        let output_text: ShellOutputFragment[] = Shell.get_instance().submit_query(this.query);
         this.handle_output(output_text, new_obj);
         
         let new_query: HTMLElement = document.createElement("p");

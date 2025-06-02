@@ -12,11 +12,15 @@ class ShellOutputFragment {
         this.content = content;
     }
 
-    get_type(this: ShellOutputFragment): Safeness {
+    static empty() {
+        return new ShellOutputFragment(Safeness.Safe, "");
+    }
+
+    get_type(): Safeness {
         return this.type;
     }
 
-    get_content(this: ShellOutputFragment): string {
+    get_content(): string {
         return this.content;
     }
 }

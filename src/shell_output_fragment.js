@@ -8,6 +8,9 @@ var ShellOutputFragment = /** @class */ (function () {
         this.type = type;
         this.content = content;
     }
+    ShellOutputFragment.empty = function () {
+        return new ShellOutputFragment(Safeness.Safe, "");
+    };
     ShellOutputFragment.prototype.get_type = function () {
         return this.type;
     };

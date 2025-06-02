@@ -1,7 +1,7 @@
 interface ShellApp {
     keyword: string;
 
-    get_keyword(this: ShellApp): string;
+    get_keyword(): string;
     handle_query(query: string): ShellOutputFragment[];
 }
 
@@ -12,7 +12,7 @@ class Help implements ShellApp {
         this.keyword = "help";
     }
 
-    get_keyword(this: ShellApp) {
+    get_keyword() {
         return this.keyword;
     }
 
@@ -36,7 +36,7 @@ class Bio implements ShellApp {
         this.keyword = "bio";
     }
 
-    get_keyword(this: ShellApp) {
+    get_keyword() {
         return this.keyword;
     }
 
@@ -59,18 +59,135 @@ class PrintWorkingDirectory implements ShellApp {
         this.keyword = "pwd";
     }
 
-    get_keyword(this: ShellApp) {
+    get_keyword() {
         return this.keyword;
     }
 
     handle_query(query: string): ShellOutputFragment[] {
         return [new ShellOutputFragment(
             Safeness.Safe,
-            Shell.get_instance().get_wd().concat(` 
-                (...I'll someday implement a full fledge filesystem here, 
-                but for now enjoy this tilde.)
-            `)
+            Shell.get_instance().get_working_directory().get_name(),
         )];
+    }
+}
+
+class ChangeDirectory implements ShellApp {
+    keyword: string;
+
+    constructor() {
+        this.keyword = "cd";
+    }
+
+    get_keyword() {
+        return this.keyword;
+    }
+
+    handle_query(query: string): ShellOutputFragment[] {
+        if (query == "..") {
+            let parent: DirectoryPath | null = Shell.get_instance().get_working_directory().get_parent();
+            if (parent == null) {
+                return [
+                    new ShellOutputFragment(Safeness.Safe, "cd: <b><i>"),
+                    new ShellOutputFragment(Safeness.Unsafe, query),
+                    new ShellOutputFragment(Safeness.Safe, "</i></b> unsuccessful, already at root."),
+                ];
+            } else {
+                Shell.get_instance().set_working_directory(parent);
+                return [
+                    new ShellOutputFragment(Safeness.Safe, "cd: <b><i>"),
+                    new ShellOutputFragment(Safeness.Unsafe, query),
+                    new ShellOutputFragment(Safeness.Safe, "</i></b> successful."),
+                ];
+            }
+        }
+        let child: ObjectPath | null = Shell.get_instance().get_working_directory().find_child(query);
+        if (child != null) {
+            if (child instanceof DirectoryPath) {
+                Shell.get_instance().set_working_directory(child);
+                return [
+                    new ShellOutputFragment(Safeness.Safe, "cd: <b><i>"),
+                    new ShellOutputFragment(Safeness.Unsafe, query),
+                    new ShellOutputFragment(Safeness.Safe, "</i></b> successful."),
+                ];
+            } else {
+                return [
+                    new ShellOutputFragment(Safeness.Safe, "cd: <b><i>"),
+                    new ShellOutputFragment(Safeness.Unsafe, query),
+                    new ShellOutputFragment(Safeness.Safe, "</i></b> is not a directory."),
+                ];
+            }
+        } else {
+            return [
+                new ShellOutputFragment(Safeness.Safe, "cd: Directory <b><i>"),
+                new ShellOutputFragment(Safeness.Unsafe, query),
+                new ShellOutputFragment(Safeness.Safe, "</i></b> not found."),
+            ];
+        }
+    }
+}
+
+class ListObjectPaths implements ShellApp {
+    keyword: string;
+
+    constructor() {
+        this.keyword = "ls";
+    }
+
+    get_keyword() {
+        return this.keyword;
+    }
+
+    handle_query(query: string): ShellOutputFragment[] {
+        return [new ShellOutputFragment(
+            Safeness.Safe,
+            function():string {
+                let fin_string: string = "";
+                let list: ObjectPath[] = Shell.get_instance().get_working_directory().get_children();
+                list.forEach(function(x: ObjectPath): void {
+                    if (x instanceof DirectoryPath) {
+                        fin_string = fin_string.concat("<b>", x.get_name(), "</b> ");
+                    } else {
+                        fin_string = fin_string.concat(x.get_name(), " ");
+                    }
+                });
+                return fin_string;
+            }(),
+        )];
+    }
+}
+
+class PrintFileContent implements ShellApp {
+    keyword: string;
+
+    constructor() {
+        this.keyword = "cat";
+    }
+
+    get_keyword() {
+        return this.keyword;
+    }
+
+    handle_query(query: string): ShellOutputFragment[] {
+        let child = Shell.get_instance().get_working_directory().find_child(query);
+        if (child != null) {
+            if (child instanceof FilePath) {
+                return [
+                    new ShellOutputFragment(Safeness.Unsafe, child.get_contents()),
+                ];
+            } else {
+                return [
+                    new ShellOutputFragment(Safeness.Safe, "cd: <b><i>"),
+                    new ShellOutputFragment(Safeness.Unsafe, query),
+                    new ShellOutputFragment(Safeness.Safe, "</i></b> is not a file."),
+                ];
+            }
+        } else {
+            return [
+                new ShellOutputFragment(Safeness.Safe, "cat: File <b><i>"),
+                new ShellOutputFragment(Safeness.Unsafe, query),
+                new ShellOutputFragment(Safeness.Safe, "</i></b> not found."),
+            ];
+        }
     }
 }
 
@@ -81,7 +198,7 @@ class Links implements ShellApp {
         this.keyword = "links";
     }
 
-    get_keyword(this: ShellApp) {
+    get_keyword() {
         return this.keyword;
     }
 
@@ -104,7 +221,7 @@ class CmdHistory implements ShellApp {
         this.keyword = "history";
     }
 
-    get_keyword(this: ShellApp) {
+    get_keyword() {
         return this.keyword;
     }
 
@@ -136,6 +253,7 @@ class Fortune implements ShellApp {
             "The night belongs to you.<br> &nbsp&nbsp- <b>Sleep Token, Euclid</b>",
             "I'm coiled up like a venomous serpent.<br> &nbsp&nbsp- <b>Sleep Token, Rain</b>",
             "I'm still your favourite regret, you're still my weapon of choosing.<br> &nbsp&nbsp- <b>Sleep Token, Blood Sport</b>",
+            "It seems that even in Arcadia you walk beside me still.<br> &nbsp&nbsp- <b>Sleep Token, Even in Arcadia</b>",
 
             "One, one less, one less life, one less life for us to live.<br> &nbsp&nbsp- <b>Haken, Invasion</b>",
             "When did we give up the ghost as a trade for a heart that begins to break?<br> &nbsp&nbsp- <b>Haken, Invasion</b>",
@@ -151,7 +269,7 @@ class Fortune implements ShellApp {
         ];
     }
 
-    get_keyword(this: Fortune) {
+    get_keyword() {
         return this.keyword;
     }
 
