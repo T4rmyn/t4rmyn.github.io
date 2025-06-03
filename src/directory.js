@@ -49,7 +49,6 @@ var DirectoryPath = /** @class */ (function (_super) {
         return this.parent;
     };
     DirectoryPath.prototype.find_child = function (query_name) {
-        console.log(this.get_children());
         return function (dir, query_name) {
             var result = dir.get_children().find(function (child) { return child.get_name() == query_name; });
             return result instanceof ObjectPath ? result : null;

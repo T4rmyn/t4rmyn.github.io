@@ -16,7 +16,6 @@ class ShellOutputEngine {
 
     set_query_history_i(value: number): void {
         this.query_history_i = Math.min(this.query_history.length, Math.max(0, value));
-        console.log(this.query_history_i.toString());
     }
 
     get_query_history(): string[] {
@@ -152,7 +151,6 @@ class ShellOutputEngine {
         new_obj.classList.add("terminal-response");
 
         this.query_history.push(this.query)
-        console.log(this.query_history)
 
         let output_text: ShellOutputFragment[] = Shell.get_instance().submit_query(this.query);
         this.handle_output(output_text, new_obj);

@@ -1,10 +1,33 @@
-var Help = /** @class */ (function () {
-    function Help() {
-        this.keyword = "help";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var ShellApp = /** @class */ (function () {
+    function ShellApp(keyword) {
+        this.keyword = keyword;
     }
-    Help.prototype.get_keyword = function () {
+    ShellApp.prototype.get_keyword = function () {
         return this.keyword;
     };
+    ;
+    return ShellApp;
+}());
+var Help = /** @class */ (function (_super) {
+    __extends(Help, _super);
+    function Help() {
+        return _super.call(this, "help") || this;
+    }
     Help.prototype.handle_query = function (query) {
         var keywords = Array.from(Shell.get_instance().get_keywords().keys()).sort();
         var final_output = [];
@@ -12,43 +35,47 @@ var Help = /** @class */ (function () {
         for (var i = 0; i < keywords.length; i++) {
             final_output.push(new ShellOutputFragment(Safeness.Safe, "&nbsp;&nbsp;- <b><i>"));
             final_output.push(new ShellOutputFragment(Safeness.Unsafe, keywords[i]));
-            final_output.push(new ShellOutputFragment(Safeness.Safe, "</i></b><br>"));
+            if (Manual.mannable(keywords[i])) {
+                final_output.push(new ShellOutputFragment(Safeness.Safe, " </i></b><span style=\"color: #d79921\">(has manpage)</span><br>"));
+            }
+            else {
+                final_output.push(new ShellOutputFragment(Safeness.Safe, "</i></b><br>"));
+            }
         }
         return final_output;
     };
     return Help;
-}());
-var Bio = /** @class */ (function () {
+}(ShellApp));
+var Bio = /** @class */ (function (_super) {
+    __extends(Bio, _super);
     function Bio() {
-        this.keyword = "bio";
+        return _super.call(this, "bio") || this;
     }
-    Bio.prototype.get_keyword = function () {
-        return this.keyword;
-    };
     Bio.prototype.handle_query = function (query) {
         return [new ShellOutputFragment(Safeness.Safe, "\n                Hi, the name's Tarmyn!\n                I'm an artist, programmer, and game developer.\n                Some things I like include Linux, Pokemon Mystery Dungeon, and progressive metal!\n            ")];
     };
-    return Bio;
-}());
-var PrintWorkingDirectory = /** @class */ (function () {
-    function PrintWorkingDirectory() {
-        this.keyword = "pwd";
-    }
-    PrintWorkingDirectory.prototype.get_keyword = function () {
-        return this.keyword;
+    Bio.prototype.get_man_entry = function () {
+        return "<b><i>bio</b></i>: Personal short bio of me, Tarmyn :>";
     };
+    return Bio;
+}(ShellApp));
+var PrintWorkingDirectory = /** @class */ (function (_super) {
+    __extends(PrintWorkingDirectory, _super);
+    function PrintWorkingDirectory() {
+        return _super.call(this, "pwd") || this;
+    }
     PrintWorkingDirectory.prototype.handle_query = function (query) {
-        return [new ShellOutputFragment(Safeness.Safe, Shell.get_instance().get_working_directory().get_name())];
+        return [new ShellOutputFragment(Safeness.Safe, "pwd: Current working directory is <b><i>" +
+                Shell.get_instance().get_working_directory().find_absolute_path() +
+                "</i></b>")];
     };
     return PrintWorkingDirectory;
-}());
-var ChangeDirectory = /** @class */ (function () {
+}(ShellApp));
+var ChangeDirectory = /** @class */ (function (_super) {
+    __extends(ChangeDirectory, _super);
     function ChangeDirectory() {
-        this.keyword = "cd";
+        return _super.call(this, "cd") || this;
     }
-    ChangeDirectory.prototype.get_keyword = function () {
-        return this.keyword;
-    };
     ChangeDirectory.prototype.handle_query = function (query) {
         if (query == "..") {
             var parent_1 = Shell.get_instance().get_working_directory().get_parent();
@@ -95,14 +122,12 @@ var ChangeDirectory = /** @class */ (function () {
         }
     };
     return ChangeDirectory;
-}());
-var ListObjectPaths = /** @class */ (function () {
+}(ShellApp));
+var ListObjectPaths = /** @class */ (function (_super) {
+    __extends(ListObjectPaths, _super);
     function ListObjectPaths() {
-        this.keyword = "ls";
+        return _super.call(this, "ls") || this;
     }
-    ListObjectPaths.prototype.get_keyword = function () {
-        return this.keyword;
-    };
     ListObjectPaths.prototype.handle_query = function (query) {
         return [new ShellOutputFragment(Safeness.Safe, function () {
                 var fin_string = "";
@@ -119,14 +144,12 @@ var ListObjectPaths = /** @class */ (function () {
             }())];
     };
     return ListObjectPaths;
-}());
-var PrintFileContent = /** @class */ (function () {
+}(ShellApp));
+var PrintFileContent = /** @class */ (function (_super) {
+    __extends(PrintFileContent, _super);
     function PrintFileContent() {
-        this.keyword = "cat";
+        return _super.call(this, "cat") || this;
     }
-    PrintFileContent.prototype.get_keyword = function () {
-        return this.keyword;
-    };
     PrintFileContent.prototype.handle_query = function (query) {
         var child = Shell.get_instance().get_working_directory().find_child(query);
         if (child != null) {
@@ -152,26 +175,22 @@ var PrintFileContent = /** @class */ (function () {
         }
     };
     return PrintFileContent;
-}());
-var Links = /** @class */ (function () {
+}(ShellApp));
+var Links = /** @class */ (function (_super) {
+    __extends(Links, _super);
     function Links() {
-        this.keyword = "links";
+        return _super.call(this, "links") || this;
     }
-    Links.prototype.get_keyword = function () {
-        return this.keyword;
-    };
     Links.prototype.handle_query = function (query) {
-        return [new ShellOutputFragment(Safeness.Safe, "\n            My Links:<br>\n            &nbsp;&nbsp;- <b><i><a href=\"https://bsky.app/profile/t4rmyn.github.io\" target=\"_blank\" class=\"link\">Bluesky</a></i></b><br>\n            &nbsp;&nbsp;- <b><i><a href=\"https://t4rmyn.itch.io/\" target=\"_blank\" class=\"link\">itch.io</a></i></b><br>\n            ")];
+        return [new ShellOutputFragment(Safeness.Safe, "\n                My Links:<br>\n                &nbsp;&nbsp;- <b><i><a href=\"https://bsky.app/profile/t4rmyn.github.io\" target=\"_blank\" class=\"link\">Bluesky</a></i></b><br>\n                &nbsp;&nbsp;- <b><i><a href=\"https://t4rmyn.itch.io/\" target=\"_blank\" class=\"link\">itch.io</a></i></b><br>\n            ")];
     };
     return Links;
-}());
-var CmdHistory = /** @class */ (function () {
+}(ShellApp));
+var CmdHistory = /** @class */ (function (_super) {
+    __extends(CmdHistory, _super);
     function CmdHistory() {
-        this.keyword = "history";
+        return _super.call(this, "history") || this;
     }
-    CmdHistory.prototype.get_keyword = function () {
-        return this.keyword;
-    };
     CmdHistory.prototype.handle_query = function (query) {
         var final_output = [];
         final_output.push(new ShellOutputFragment(Safeness.Safe, "History:<br>"));
@@ -184,11 +203,12 @@ var CmdHistory = /** @class */ (function () {
         return final_output;
     };
     return CmdHistory;
-}());
-var Fortune = /** @class */ (function () {
+}(ShellApp));
+var Fortune = /** @class */ (function (_super) {
+    __extends(Fortune, _super);
     function Fortune() {
-        this.keyword = "fortune";
-        this.quotes = [
+        var _this = _super.call(this, "fortune") || this;
+        _this.quotes = [
             "The machines are turning me!<br> &nbsp&nbsp- <b>Periphery, Wax Wings</b>",
             "So many reasons why one should never entertain the taste of Scarlet.<br> &nbsp&nbsp- <b>Periphery, Scarlet</b>",
             "Chase the obscene, travel these wonders far beyond!<br> &nbsp&nbsp- <b>Periphery, Froggin' Bullfish</b>",
@@ -208,12 +228,45 @@ var Fortune = /** @class */ (function () {
             "I can be guilty free, don't you see? In a world designed for you and me.<br> &nbsp&nbsp- <b>TesseracT, Legion</b>",
             "So my demons, your time has come.<br> &nbsp&nbsp- <b>TesseracT, Concealing Fate - Part 2: Deception</b>",
         ];
+        return _this;
     }
-    Fortune.prototype.get_keyword = function () {
-        return this.keyword;
-    };
     Fortune.prototype.handle_query = function (query) {
         return [new ShellOutputFragment(Safeness.Safe, this.quotes[Math.floor(Math.random() * this.quotes.length)])];
     };
+    Fortune.prototype.get_man_entry = function () {
+        return "<b><i>fortune</b></i>: Get selected random quotes, inspired by the UNIX fortune command line utility of the same name.";
+    };
     return Fortune;
-}());
+}(ShellApp));
+var Manual = /** @class */ (function (_super) {
+    __extends(Manual, _super);
+    function Manual() {
+        return _super.call(this, "man") || this;
+    }
+    Manual.prototype.handle_query = function (query) {
+        return [new ShellOutputFragment(Safeness.Safe, function (query) {
+                if (Shell.get_instance().get_keywords().has(query)) {
+                    var app = Shell.get_instance().get_keywords().get(query);
+                    if ("get_man_entry" in app) {
+                        return app.get_man_entry();
+                    }
+                    else {
+                        return "man: <b><i>" + app.get_keyword() + "</i></b> has no man entry.";
+                    }
+                }
+                else {
+                    return "man: <b><i>" + query + "</i></b> is not a recognized command.";
+                }
+            }(query))];
+    };
+    Manual.mannable = function (query) {
+        if (Shell.get_instance().get_keywords().has(query)) {
+            var app = Shell.get_instance().get_keywords().get(query);
+            if ("get_man_entry" in app) {
+                return true;
+            }
+        }
+        return false;
+    };
+    return Manual;
+}(ShellApp));

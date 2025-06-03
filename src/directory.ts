@@ -42,7 +42,6 @@ class DirectoryPath extends ObjectPath {
     }
 
     find_child(query_name: string): ObjectPath | null {
-        console.log(this.get_children())
         return function(dir: DirectoryPath, query_name: string) {
             let result: ObjectPath | undefined = dir.get_children().find(
                 (child: DirectoryPath) => child.get_name() == query_name

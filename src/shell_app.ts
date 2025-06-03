@@ -1,19 +1,28 @@
-interface ShellApp {
+abstract class ShellApp {
     keyword: string;
 
-    get_keyword(): string;
-    handle_query(query: string): ShellOutputFragment[];
-}
-
-class Help implements ShellApp {
-    keyword: string;
-
-    constructor() {
-        this.keyword = "help";
+    constructor(keyword: string) {
+        this.keyword = keyword;
     }
 
-    get_keyword() {
+    get_keyword(): string {
         return this.keyword;
+    };
+    
+    abstract handle_query(query: string): ShellOutputFragment[];
+}
+
+interface PathApp {
+    query_object_path(query: string): ObjectPath;
+}
+
+interface ManApp {
+    get_man_entry(): string;
+}
+
+class Help extends ShellApp {
+    constructor() {
+        super("help")
     }
 
     handle_query(query: string): ShellOutputFragment[] {
@@ -23,21 +32,19 @@ class Help implements ShellApp {
         for (let i = 0; i < keywords.length; i++) {
             final_output.push(new ShellOutputFragment(Safeness.Safe, "&nbsp;&nbsp;- <b><i>"));
             final_output.push(new ShellOutputFragment(Safeness.Unsafe, keywords[i]));
-            final_output.push(new ShellOutputFragment(Safeness.Safe, "</i></b><br>"));
+            if (Manual.mannable(keywords[i])) {
+                final_output.push(new ShellOutputFragment(Safeness.Safe, " </i></b><span style=\"color: #d79921\">(has manpage)</span><br>"));
+            } else {
+                final_output.push(new ShellOutputFragment(Safeness.Safe, "</i></b><br>"));
+            }
         }
         return final_output;
     }
 }
 
-class Bio implements ShellApp {
-    keyword: string;
-
+class Bio extends ShellApp implements ManApp {
     constructor() {
-        this.keyword = "bio";
-    }
-
-    get_keyword() {
-        return this.keyword;
+        super("bio");
     }
 
     handle_query(query: string): ShellOutputFragment[] {
@@ -50,36 +57,30 @@ class Bio implements ShellApp {
             `
         )];
     }
+
+    get_man_entry(): string {
+        return "<b><i>bio</b></i>: Personal short bio of me, Tarmyn :>";
+    }
 }
 
-class PrintWorkingDirectory implements ShellApp {
-    keyword: string;
-
+class PrintWorkingDirectory extends ShellApp {
     constructor() {
-        this.keyword = "pwd";
-    }
-
-    get_keyword() {
-        return this.keyword;
+        super("pwd");
     }
 
     handle_query(query: string): ShellOutputFragment[] {
         return [new ShellOutputFragment(
             Safeness.Safe,
-            Shell.get_instance().get_working_directory().get_name(),
+            "pwd: Current working directory is <b><i>" +
+            Shell.get_instance().get_working_directory().find_absolute_path() +
+            "</i></b>",
         )];
     }
 }
 
-class ChangeDirectory implements ShellApp {
-    keyword: string;
-
+class ChangeDirectory extends ShellApp implements PathApp {
     constructor() {
-        this.keyword = "cd";
-    }
-
-    get_keyword() {
-        return this.keyword;
+        super("cd");
     }
 
     handle_query(query: string): ShellOutputFragment[] {
@@ -124,17 +125,13 @@ class ChangeDirectory implements ShellApp {
             ];
         }
     }
+
+    query_object_path
 }
 
-class ListObjectPaths implements ShellApp {
-    keyword: string;
-
+class ListObjectPaths extends ShellApp {
     constructor() {
-        this.keyword = "ls";
-    }
-
-    get_keyword() {
-        return this.keyword;
+        super("ls");
     }
 
     handle_query(query: string): ShellOutputFragment[] {
@@ -156,15 +153,9 @@ class ListObjectPaths implements ShellApp {
     }
 }
 
-class PrintFileContent implements ShellApp {
-    keyword: string;
-
+class PrintFileContent extends ShellApp {
     constructor() {
-        this.keyword = "cat";
-    }
-
-    get_keyword() {
-        return this.keyword;
+        super("cat");
     }
 
     handle_query(query: string): ShellOutputFragment[] {
@@ -191,38 +182,26 @@ class PrintFileContent implements ShellApp {
     }
 }
 
-class Links implements ShellApp {
-    keyword: string;
-
+class Links extends ShellApp {
     constructor() {
-        this.keyword = "links";
-    }
-
-    get_keyword() {
-        return this.keyword;
+        super("links");
     }
 
     handle_query(query: string): ShellOutputFragment[] {
         return [new ShellOutputFragment(
             Safeness.Safe,
             `
-            My Links:<br>
-            &nbsp;&nbsp;- <b><i><a href="https://bsky.app/profile/t4rmyn.github.io" target="_blank" class="link">Bluesky</a></i></b><br>
-            &nbsp;&nbsp;- <b><i><a href="https://t4rmyn.itch.io/" target="_blank" class="link">itch.io</a></i></b><br>
-            `
+                My Links:<br>
+                &nbsp;&nbsp;- <b><i><a href="https://bsky.app/profile/t4rmyn.github.io" target="_blank" class="link">Bluesky</a></i></b><br>
+                &nbsp;&nbsp;- <b><i><a href="https://t4rmyn.itch.io/" target="_blank" class="link">itch.io</a></i></b><br>
+            `,
         )];
     }
 }
 
-class CmdHistory implements ShellApp {
-    keyword: string;
-
+class CmdHistory extends ShellApp {
     constructor() {
-        this.keyword = "history";
-    }
-
-    get_keyword() {
-        return this.keyword;
+        super("history");
     }
 
     handle_query(query: string): ShellOutputFragment[] {
@@ -238,12 +217,11 @@ class CmdHistory implements ShellApp {
     }
 }
 
-class Fortune implements ShellApp {
-    keyword: string;
+class Fortune extends ShellApp implements ManApp {
     quotes: string[];
 
     constructor() {
-        this.keyword = "fortune";
+        super("fortune");
         this.quotes = [
             "The machines are turning me!<br> &nbsp&nbsp- <b>Periphery, Wax Wings</b>",
             "So many reasons why one should never entertain the taste of Scarlet.<br> &nbsp&nbsp- <b>Periphery, Scarlet</b>",
@@ -269,14 +247,50 @@ class Fortune implements ShellApp {
         ];
     }
 
-    get_keyword() {
-        return this.keyword;
-    }
-
     handle_query(query: string): ShellOutputFragment[] {
         return [new ShellOutputFragment(
             Safeness.Safe,
             this.quotes[Math.floor(Math.random() * this.quotes.length)],
         )];
+    }
+
+    get_man_entry(): string {
+        return "<b><i>fortune</b></i>: Get selected random quotes, inspired by the UNIX fortune command line utility of the same name."
+    }
+}
+
+class Manual extends ShellApp {
+    keyword: string;
+
+    constructor() {
+        super("man");
+    }
+
+    handle_query(query: string): ShellOutputFragment[] {
+        return [new ShellOutputFragment(
+            Safeness.Safe,
+            function(query: string): string {
+                if (Shell.get_instance().get_keywords().has(query)) {
+                    let app: ShellApp | undefined = Shell.get_instance().get_keywords().get(query);
+                    if ("get_man_entry" in app) {
+                        return (app as ManApp).get_man_entry();
+                    } else {
+                        return "man: <b><i>" + app.get_keyword() + "</i></b> has no man entry.";
+                    }
+                } else {
+                    return "man: <b><i>" + query + "</i></b> is not a recognized command.";
+                }
+            }(query),
+        )];
+    }
+
+    static mannable(query: string): boolean {
+        if (Shell.get_instance().get_keywords().has(query)) {
+            let app: ShellApp | undefined = Shell.get_instance().get_keywords().get(query);
+            if ("get_man_entry" in app) {
+                return true;
+            }
+        }
+        return false;
     }
 }
