@@ -1,0 +1,104 @@
+body {
+    display: flex;
+    background: linear-gradient(-70deg, #b8bb26, #83a598,#fe8019);
+	background-size: 300%;
+    height: 100%;
+    animation: move-gradient 20s ease infinite;
+    margin: 0px;
+}
+
+@keyframes move-gradient {
+	0% {
+		background-position: 0%;
+	}
+	50% {
+		background-position: 10%;
+	}
+	100% {
+		background-position: 0%;
+	}
+}
+
+#terminal-box {
+    background-color: #1d2021;
+    box-shadow: 0px 0px 15px 5px #1d2021;
+    border-radius: 16px;
+    display: flex;
+    align-self: stretch;
+    flex-direction: column;
+    margin: 16px;
+    padding: 16px;
+    width: 100%;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}
+
+#source {
+    color: #7c6f64;
+    font-family: "Cascadia Code";
+    font-size: 12px;
+    text-align: center;
+    margin: 0px;
+}
+
+#source-link {
+    color: #665c54;
+    font-family: "Cascadia Code";
+}
+
+.upper-section-box {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    background-color: #3c3836;
+    border-radius: 8px;
+    color: #8ea598;
+    padding: 4px;
+    margin-bottom: 16px;
+    box-shadow: 0px 0px 10px 0px #1d2021 inset;
+}
+
+.lower-section-box {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    width: 100%;
+    text-shadow: 0px 0px 5px color-mix(in srgb, currentColor 40%, transparent);
+}
+
+.terminal-query {
+    background-color: #282828;
+    border-radius: 4px;
+    color: #8ec07c;
+    font-family: "Cascadia Code";
+    font-size: 14px;
+    margin: 4px;
+    overflow-wrap: anywhere;
+    padding: 8px;
+}
+
+.terminal-response {
+    background-color: #282828;
+    border-radius: 4px;
+    color: #8ea598;
+    font-family: "Cascadia Code";
+    font-size: 14px;
+    margin: 4px;
+    overflow-wrap: anywhere;
+    padding: 8px;
+}
+
+.link {
+    color: #458588;
+}
+
+.ticker {
+    background-color: #3c3836;
+    border-radius: 4px;
+    color: #8ea598;
+    font-family: "Cascadia Code";
+    font-size: 14px;
+    align-content: center;
+    text-align: center;
+    padding: 4px;
+}

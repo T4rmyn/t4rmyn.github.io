@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "lib": [
+            "ES2024",
+            "dom",
+        ],
+        "outDir": "dist",
+        "sourceMap": true,
+    },
+}
