@@ -6,12 +6,12 @@ class Meta {
     }
 
     static main(): void {
-        document.head.appendChild(Meta.createScript("src/directory.js"));
-        document.head.appendChild(Meta.createScript("src/machine.js"));
-        document.head.appendChild(Meta.createScript("src/shell_output_fragment.js"));
-        document.head.appendChild(Meta.createScript("src/shell_app.js"));
-        document.head.appendChild(Meta.createScript("src/shell.js"));
-        document.head.appendChild(Meta.createScript("src/shell_output_engine.js"));
+        document.head.appendChild(Meta.createScript("dist/directory.js"));
+        document.head.appendChild(Meta.createScript("dist/machine.js"));
+        document.head.appendChild(Meta.createScript("dist/shell_output_fragment.js"));
+        document.head.appendChild(Meta.createScript("dist/shell_app.js"));
+        document.head.appendChild(Meta.createScript("dist/shell.js"));
+        document.head.appendChild(Meta.createScript("dist/shell_output_engine.js"));
     }
 }
 

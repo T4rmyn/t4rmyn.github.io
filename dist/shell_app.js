@@ -52,10 +52,10 @@ var Bio = /** @class */ (function (_super) {
         return _super.call(this, "bio") || this;
     }
     Bio.prototype.handle_query = function (query) {
-        return [new ShellOutputFragment(Safeness.Safe, "\n                Hi, the name's Tarmyn!\n                I'm an artist, programmer, and game developer.\n                Some things I like include Linux, Pokemon Mystery Dungeon, and progressive metal!\n            ")];
+        return [new ShellOutputFragment(Safeness.Safe, "\n                Hi, the name's Tarmyn!\n                I'm an artist, programmer, and game developer.\n                Some things I like include Linux, Godot, and Progressive Metal/Djent!\n            ")];
     };
     Bio.prototype.get_man_entry = function () {
-        return "<b><i>bio</b></i>: Personal short bio of me, Tarmyn :>";
+        return "<b><i>bio</b></i>: Personal short bio of myself.";
     };
     return Bio;
 }(ShellApp));
@@ -182,7 +182,7 @@ var Links = /** @class */ (function (_super) {
         return _super.call(this, "links") || this;
     }
     Links.prototype.handle_query = function (query) {
-        return [new ShellOutputFragment(Safeness.Safe, "\n                My Links:<br>\n                &nbsp;&nbsp;- <b><i><a href=\"https://bsky.app/profile/t4rmyn.github.io\" target=\"_blank\" class=\"link\">Bluesky</a></i></b><br>\n                &nbsp;&nbsp;- <b><i><a href=\"https://t4rmyn.itch.io/\" target=\"_blank\" class=\"link\">itch.io</a></i></b><br>\n            ")];
+        return [new ShellOutputFragment(Safeness.Safe, "\n                My Links:<br>\n                &nbsp;&nbsp;- <b><i><a href=\"https://bsky.app/profile/t4rmyn.bsky.social\" target=\"_blank\" class=\"link\">Bluesky</a></i></b><br>\n                &nbsp;&nbsp;- <b><i><a href=\"https://t4rmyn.itch.io/\" target=\"_blank\" class=\"link\">itch.io</a></i></b><br>\n            ")];
     };
     return Links;
 }(ShellApp));
@@ -234,7 +234,7 @@ var Fortune = /** @class */ (function (_super) {
         return [new ShellOutputFragment(Safeness.Safe, this.quotes[Math.floor(Math.random() * this.quotes.length)])];
     };
     Fortune.prototype.get_man_entry = function () {
-        return "<b><i>fortune</b></i>: Get selected random quotes, inspired by the UNIX fortune command line utility of the same name.";
+        return "<b><i>fortune</b></i>: Fetch selected random quotes, inspired by the UNIX fortune command line utility of the same name.";
     };
     return Fortune;
 }(ShellApp));
