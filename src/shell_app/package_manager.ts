@@ -14,6 +14,7 @@ export class PackageManager {
             new app.CmdHistory(),
             new app.Fortune(),
             new app.Manual(),
+            new app.Projects(),
         );
         return packages;
     }

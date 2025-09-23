@@ -7,5 +7,6 @@ export * from './history.js';
 export * from './links.js';
 export * from './ls.js';
 export * from './manual.js';
+export * from './projects.js';
 export * from './pwd.js';
 //# sourceMappingURL=index.js.map
