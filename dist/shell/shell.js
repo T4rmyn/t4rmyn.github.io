@@ -1,11 +1,9 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Shell = void 0;
-var package_manager_1 = require("./shell_app/package_manager");
+import { PackageManager } from "../shell_app/package_manager.js";
+import * as shell from "./index.js";
 var Shell = /** @class */ (function () {
     function Shell() {
         this.working_directory = Machine.get_instance().get_root();
-        this.apps = package_manager_1.PackageManager.basic_packages();
+        this.apps = PackageManager.basic_packages();
         this.keywords = new Map();
         for (var i = 0; i < this.apps.length; i++) {
             this.keywords.set(this.apps[i].get_keyword(), this.apps[i]);
@@ -33,13 +31,13 @@ var Shell = /** @class */ (function () {
         }
         else {
             return [
-                new ShellOutputFragment(Safeness.Safe, "Command: <b><i>"),
-                new ShellOutputFragment(Safeness.Unsafe, splitted[0]),
-                new ShellOutputFragment(Safeness.Safe, "</i></b> not found."),
+                new shell.ShellOutputFragment(shell.Safeness.Safe, "Command: <b><i>"),
+                new shell.ShellOutputFragment(shell.Safeness.Unsafe, splitted[0]),
+                new shell.ShellOutputFragment(shell.Safeness.Safe, "</i></b> not found."),
             ];
         }
     };
     return Shell;
 }());
-exports.Shell = Shell;
+export { Shell };
 //# sourceMappingURL=shell.js.map

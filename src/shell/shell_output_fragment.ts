@@ -1,9 +1,9 @@
-enum Safeness {
+export enum Safeness {
     Safe,
     Unsafe,
 }
 
-class ShellOutputFragment {
+export class ShellOutputFragment {
     type: Safeness;
     content: string;
 

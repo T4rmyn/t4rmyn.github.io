@@ -1,4 +1,8 @@
-class Shell {
+import { ShellApp } from "../shell_app/shell_app.js";
+import { PackageManager } from "../shell_app/package_manager.js";
+import * as shell from "./index.js";
+
+export class Shell {
     static instance: Shell;
 
     public static get_instance(): Shell {
@@ -15,18 +19,7 @@ class Shell {
 
     constructor() {
         this.working_directory = Machine.get_instance().get_root();
-        this.apps = new Array<ShellApp>(
-            new Help(),
-            new Bio(),
-            new PrintWorkingDirectory(),
-            new PrintFileContent(),
-            new ListObjectPaths(),
-            new ChangeDirectory(),
-            new Links(),
-            new CmdHistory(),
-            new Fortune(),
-            new Manual(),
-        );
+        this.apps = PackageManager.basic_packages();
 
         this.keywords = new Map<string, ShellApp>();
         for (let i = 0; i < this.apps.length; i++) {
@@ -46,7 +39,7 @@ class Shell {
         return this.working_directory;
     }
 
-    submit_query(query: string): ShellOutputFragment[] {
+    submit_query(query: string): shell.ShellOutputFragment[] {
         let splitted: string[] = query.split(" ");
         if (this.keywords.has(splitted[0])) {
             return this.keywords.get(splitted[0]).handle_query(
@@ -54,9 +47,9 @@ class Shell {
             );
         } else {
             return [
-                new ShellOutputFragment(Safeness.Safe, "Command: <b><i>"),
-                new ShellOutputFragment(Safeness.Unsafe, splitted[0]),
-                new ShellOutputFragment(Safeness.Safe, "</i></b> not found."),
+                new shell.ShellOutputFragment(shell.Safeness.Safe, "Command: <b><i>"),
+                new shell.ShellOutputFragment(shell.Safeness.Unsafe, splitted[0]),
+                new shell.ShellOutputFragment(shell.Safeness.Safe, "</i></b> not found."),
             ];
         }
     }

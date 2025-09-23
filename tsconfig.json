@@ -6,5 +6,6 @@
         ],
         "outDir": "dist",
         "sourceMap": true,
+        "module": "es6",
     },
 }

@@ -1,4 +1,6 @@
-class ShellOutputEngine {
+import * as shell from "./index.js";
+
+export class ShellOutputEngine {
     static instance: ShellOutputEngine;
 
     public static get_instance(): ShellOutputEngine {
@@ -47,12 +49,12 @@ class ShellOutputEngine {
         this.set_query_history_i(this.query_history.length);
     }
 
-    handle_output(output: ShellOutputFragment[], obj: HTMLElement): void {
+    handle_output(output: shell.ShellOutputFragment[], obj: HTMLElement): void {
         let final_string = "";
         
-        output.forEach(function(text: ShellOutputFragment) {
+        output.forEach(function(text: shell.ShellOutputFragment) {
             let temp_string = text.get_content();
-            if (text.get_type() === Safeness.Unsafe) {
+            if (text.get_type() === shell.Safeness.Unsafe) {
                 temp_string = String(temp_string)
                     .replaceAll("&", "&amp;")
                     .replaceAll("<", "&lt;")
@@ -71,15 +73,15 @@ class ShellOutputEngine {
             "main".concat(this.query_id.toString())
         );
         if (text !== null) {
-            let output: ShellOutputFragment[] = [
-                new ShellOutputFragment(Safeness.Safe, "".concat(
+            let output: shell.ShellOutputFragment[] = [
+                new shell.ShellOutputFragment(shell.Safeness.Safe, "".concat(
                     "t4rmyn@arkane:",
-                    Shell.get_instance().get_working_directory().find_absolute_path(),
+                    shell.Shell.get_instance().get_working_directory().find_absolute_path(),
                     "> ",
                     "<span style=\"color: #ebdbb2\"> ",
                 )),
-                new ShellOutputFragment(Safeness.Unsafe, this.query),
-                new ShellOutputFragment(Safeness.Safe, "█</span>"),
+                new shell.ShellOutputFragment(shell.Safeness.Unsafe, this.query),
+                new shell.ShellOutputFragment(shell.Safeness.Safe, "█</span>"),
             ];
             this.handle_output(output, text);
         }
@@ -97,15 +99,15 @@ class ShellOutputEngine {
             "main".concat(this.query_id.toString())
         );
         if (text !== null) {
-            let output: ShellOutputFragment[] = [
-                new ShellOutputFragment(Safeness.Safe, "".concat(
+            let output: shell.ShellOutputFragment[] = [
+                new shell.ShellOutputFragment(shell.Safeness.Safe, "".concat(
                     "t4rmyn@arkane:",
-                    Shell.get_instance().get_working_directory().find_absolute_path(),
+                    shell.Shell.get_instance().get_working_directory().find_absolute_path(),
                     "> ",
                     "<span style=\"color: #ebdbb2\"> ",
                 )),
-                new ShellOutputFragment(Safeness.Unsafe, this.query),
-                new ShellOutputFragment(Safeness.Safe, "</span>"),
+                new shell.ShellOutputFragment(shell.Safeness.Unsafe, this.query),
+                new shell.ShellOutputFragment(shell.Safeness.Safe, "</span>"),
             ];
             this.handle_output(output, text);
         }
@@ -152,7 +154,7 @@ class ShellOutputEngine {
 
         this.query_history.push(this.query)
 
-        let output_text: ShellOutputFragment[] = Shell.get_instance().submit_query(this.query);
+        let output_text: shell.ShellOutputFragment[] = shell.Shell.get_instance().submit_query(this.query);
         this.handle_output(output_text, new_obj);
         
         let new_query: HTMLElement = document.createElement("p");
