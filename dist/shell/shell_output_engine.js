@@ -115,7 +115,7 @@ var ShellOutputEngine = /** @class */ (function () {
         old_l_section_box.appendChild(new_obj);
         new_l_section_box.appendChild(new_query);
         new_section_box.appendChild(new_l_section_box);
-        var source = document.getElementById("source");
+        var source = document.getElementById("bottom-section-box");
         parent_div.insertBefore(new_section_box, source);
         this.query = "";
         this.set_query_history_i(this.query_history.length);
@@ -151,4 +151,16 @@ document.addEventListener('keydown', function (event) {
     }
     ShellOutputEngine.get_instance().update_shell();
 });
+document.getElementById("projects").addEventListener("click", (function () {
+    ShellOutputEngine.get_instance().replace_query("projects");
+    ShellOutputEngine.get_instance().update_shell();
+    ShellOutputEngine.get_instance().submit_query();
+    ShellOutputEngine.get_instance().update_shell();
+}));
+document.getElementById("bio").addEventListener("click", (function () {
+    ShellOutputEngine.get_instance().replace_query("bio");
+    ShellOutputEngine.get_instance().update_shell();
+    ShellOutputEngine.get_instance().submit_query();
+    ShellOutputEngine.get_instance().update_shell();
+}));
 //# sourceMappingURL=shell_output_engine.js.map

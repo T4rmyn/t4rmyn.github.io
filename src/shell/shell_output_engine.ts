@@ -35,7 +35,7 @@ export class ShellOutputEngine {
         this.set_query_history_i(this.query_history.length - 1);
     }
 
-    replace_query(this: ShellOutputEngine, char: string): void {
+    replace_query(char: string): void {
         this.query = char;
     }
 
@@ -165,7 +165,7 @@ export class ShellOutputEngine {
         (new_l_section_box as HTMLElement).appendChild(new_query);
         (new_section_box as HTMLElement).appendChild(new_l_section_box);
 
-        let source: HTMLElement | null = document.getElementById("source");
+        let source: HTMLElement | null = document.getElementById("bottom-section-box");
         (parent_div as HTMLElement).insertBefore(new_section_box, source);
 
         this.query = "";
@@ -201,3 +201,27 @@ document.addEventListener('keydown', function(event) {
     }
     ShellOutputEngine.get_instance().update_shell()
 });
+
+document.getElementById("projects").addEventListener(
+    "click",
+    (
+        function(){
+            ShellOutputEngine.get_instance().replace_query("projects");
+            ShellOutputEngine.get_instance().update_shell();
+            ShellOutputEngine.get_instance().submit_query();
+            ShellOutputEngine.get_instance().update_shell();
+        }
+    )
+);
+
+document.getElementById("bio").addEventListener(
+    "click",
+    (
+        function(){
+            ShellOutputEngine.get_instance().replace_query("bio");
+            ShellOutputEngine.get_instance().update_shell();
+            ShellOutputEngine.get_instance().submit_query();
+            ShellOutputEngine.get_instance().update_shell();
+        }
+    )
+);
