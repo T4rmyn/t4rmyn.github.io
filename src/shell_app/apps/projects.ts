@@ -10,9 +10,11 @@ export class Projects extends ShellApp {
         return [new shell.ShellOutputFragment(
             shell.Safeness.Safe,
             `
-                <b>t4rmyn.github.io</b><br>
-                &nbsp;&nbsp;The website you're currently seeing right now! This website and all of its functionalities (including the shell) is built using pure HTML, CSS, JavaScript/TypeScript. This is a static website that mimics a simplified terminal shell, with all of the logic coded in TypeScript, and transpiled to JavaScript.
+                <a href="https://github.com/T4rmyn/t4rmyn.github.io"><b>t4rmyn.github.io</b></a><br>
+                &nbsp;&nbsp;The website you're currently seeing right now! This website and all of its functionalities (including the shell) is built using pure HTML, CSS, JavaScript/TypeScript. This is a static website that mimics a simplified terminal shell running entirely within the browser, with all of the logic coded in TypeScript, and transpiled to JavaScript.<br><br>
                 
+                <a href="https://github.com/T4rmyn/t4rmyn.github.io"><b>Polygraphia</b></a><br>
+                &nbsp;&nbsp;A simple Command Line Interface application to encrypt and decrypt texts using classical cipher methods. Built using C++ as a hobby project to practice with terminal input conventions and parsing.
             `
         )];
     }
