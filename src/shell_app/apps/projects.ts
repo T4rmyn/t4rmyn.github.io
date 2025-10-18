@@ -15,6 +15,9 @@ export class Projects extends ShellApp {
                 
                 <a href="https://github.com/T4rmyn/t4rmyn.github.io"><b>Polygraphia</b></a><br>
                 &nbsp;&nbsp;A simple Command Line Interface application to encrypt and decrypt texts using classical cipher methods. Built using C++ as a hobby project to practice with terminal input conventions and parsing.
+
+                <a href="https://github.com/T4rmyn/armaNES"<b>armaNES</b></a><br>
+                &nbsp;&nbsp;An NES emulator runnable in the browser  made with TypeScript. Currently implemented the CPU, with the rest to follow.
             `
         )];
     }
