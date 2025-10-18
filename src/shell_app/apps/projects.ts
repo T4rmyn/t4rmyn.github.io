@@ -14,7 +14,7 @@ export class Projects extends ShellApp {
                 &nbsp;&nbsp;The website you're currently seeing right now! This website and all of its functionalities (including the shell) is built using pure HTML, CSS, JavaScript/TypeScript. This is a static website that mimics a simplified terminal shell running entirely within the browser, with all of the logic coded in TypeScript, and transpiled to JavaScript.<br><br>
                 
                 <a href="https://github.com/T4rmyn/t4rmyn.github.io"><b>Polygraphia</b></a><br>
-                &nbsp;&nbsp;A simple Command Line Interface application to encrypt and decrypt texts using classical cipher methods. Built using C++ as a hobby project to practice with terminal input conventions and parsing.
+                &nbsp;&nbsp;A simple Command Line Interface application to encrypt and decrypt texts using classical cipher methods. Built using C++ as a hobby project to practice with terminal input conventions and parsing.<br><br>
 
                 <a href="https://github.com/T4rmyn/armaNES"<b>armaNES</b></a><br>
                 &nbsp;&nbsp;An NES emulator runnable in the browser  made with TypeScript. Currently implemented the CPU, with the rest to follow.
